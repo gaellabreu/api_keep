@@ -2,49 +2,23 @@ pipeline {
   agent any
 
   stages {
-    stage('Checkout') {
+    stage('Build') {
       steps {
-        // Checkout the source code from the repository
-        git 'https://github.com/your-repo/node-app.git'
+        echo 'Starting the build...'
+        sh 'docker build -t api .'
       }
     }
 
-    stage('Build and Test') {
+    stage('Test') {
       steps {
-        // Build and test the Docker image
-        script {
-          // Build the Docker image
-          docker.build('my-node-app', '-f Dockerfile .')
-
-          // Run tests inside the Docker container
-          docker.image('my-node-app').inside {
-            sh 'npm install'
-            sh 'npm run test'
-          }
-        }
+        sh 'docker run api npm test'
       }
     }
 
     stage('Deploy') {
       steps {
-        // Deploy the Docker container
-        script {
-          // Pull the Docker image from a registry
-          docker.withRegistry('https://dockerhub.com', 'credentials-id') {
-            docker.image('my-node-app').pull()
-          }
-
-          // Run the Docker container
-          docker.image('my-node-app').run('--name node-app-container -p 3000:3000 -d')
-        }
+        sh 'docker push gaellabreu/api:latest'
       }
-    }
-  }
-
-  post {
-    always {
-      // Clean up after the pipeline
-      deleteDir()
     }
   }
 }
