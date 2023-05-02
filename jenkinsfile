@@ -5,17 +5,17 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Starting the build...'
-        sh 'docker build -t api .'
+        sh 'docker build -t api:version2 .'
       }
     }
     stage('Test') {
       steps {
-        sh 'docker run api npm test'
+        sh 'docker run api:version2 npm test'
       }
     }
     stage('Deploy') {
       steps {
-        sh 'docker push gaellabreu/api:latest'
+        sh 'docker push gaellabreu/api:version2'
       }
     }
   }
