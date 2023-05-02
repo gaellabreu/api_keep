@@ -8,13 +8,11 @@ pipeline {
         sh 'docker build -t api .'
       }
     }
-
     stage('Test') {
       steps {
         sh 'docker run api npm test'
       }
     }
-
     stage('Deploy') {
       steps {
         sh 'docker push gaellabreu/api:latest'
