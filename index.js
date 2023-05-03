@@ -20,3 +20,4 @@ const port = 3001;
 
 console.log('Running a 2nd time')
 app.listen(port, () => console.log(`listening on port ${port}`))
+module.exports = { app }
